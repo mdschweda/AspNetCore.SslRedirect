@@ -2,7 +2,19 @@
   "title": "AspNetCore.SslRedirect",
   "description": "ASP.NET Core middleware and MVC extension for redirecting requests to HTTPS.",
   "copyright": "Copyright © 2017 Marcus Schweda",
-  "version": "1.0.0-*",
+  "version": "1.0.1-*",
+
+  "buildOptions": {
+    "xmlDoc": true
+  },
+
+  "packOptions": {
+    "summary": "ASP.NET Core middleware and MVC extension for redirecting requests to HTTPS.",
+    "owners": [ "Marcus Schweda" ],
+    "projectUrl": "https://github.com/mdschweda/AspNetCore.SslRedirect",
+    "licenseUrl": "https://github.com/mdschweda/AspNetCore.SslRedirect/blob/master/LICENSE",
+    "tags": [ "ASP", "MVC", "Core", "SSL", "HTTPS", "Redirect" ]
+  },
 
   "dependencies": {
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0",
