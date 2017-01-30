@@ -1,0 +1,12 @@
+version: 1.0.{build}
+init:
+  - git config --global core.autocrlf true
+branches:
+  only:
+    - master
+configuration:
+  - Release
+build_script:
+  - dotnet build src\AspNetCore.SslRedirect -c %CONFIGURATION%
+test_script:
+  - dotnet test test\AspNetCore.SslRedirect.Tests -c %CONFIGURATION%
