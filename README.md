@@ -114,16 +114,19 @@ Upgrades unsecured requests invoking action `Authenticate`.
 ## Options
 
 * **SslPort** - The HTTPS port number
+
   ```csharp
   options.SslPort = Environment.IsDevelopment() ? 44300 : 443;
   ```
 * **Method** - The HTTP method used for redirecting requests. See
   [RFC 7231, Section 6.4](https://tools.ietf.org/html/rfc7231#section-6.4) and
   [RFC 7238](https://tools.ietf.org/html/rfc7238)
+  
   ```csharp
   options.Method = HttpRedirectMethod.TemporaryRedirect;
   ```
 * **HstsHeader** - The HSTS header information
+
   ```csharp
   options.HstsHeader.MaxAge = TimeSpan.FromMonths(1);
   options.HstsHeader.IncludeSubDomains = true;
