@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SslRedirect")]
-[assembly: AssemblyProduct("SslRedirect")]
+[assembly: AssemblyTitle("AspNetCore.SslRedirect")]
+[assembly: AssemblyProduct("AspNetCore.SslRedirect")]
 [assembly: AssemblyDescription("ASP.NET Core middleware and MVC extension for redirecting requests to HTTPS.")]
 [assembly: AssemblyCopyright("Copyright © 2017 Marcus Schweda")]
 [assembly: AssemblyVersion("1.0.0.0")]

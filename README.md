@@ -5,7 +5,7 @@ ASP.NET Core middleware and MVC extension for redirecting requests to HTTPS.
 ## Installation
 
 ```
-Install-Package SslRedirect
+Install-Package AspNetCore.SslRedirect
 ```
 
 ## Setup
