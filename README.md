@@ -1,5 +1,7 @@
 # AspNetCore.SslRedirect
 
+[![Build status](https://ci.appveyor.com/api/projects/status/g166j7nsrpxb2bl8/branch/master?svg=true)](https://ci.appveyor.com/project/mdschweda/aspnetcore-sslredirect/branch/master)
+
 ASP.NET Core middleware and MVC extension for redirecting requests to HTTPS.
 
 ## Installation
