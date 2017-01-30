@@ -12,6 +12,8 @@ before_build:
   - appveyor-retry dotnet restore -v Minimal
 build_script:
 - cmd: dotnet build src\AspNetCore.SslRedirect -c %CONFIGURATION%
+after_build:
+-cmd : dotnet pack src\AspNetCore.SslRedirect -c %CONFIGURATION%
 test_script:
 - cmd: dotnet test test\AspNetCore.SslRedirect.Tests -c %CONFIGURATION%
 deploy:
