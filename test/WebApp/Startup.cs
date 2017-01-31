@@ -29,7 +29,6 @@ namespace WebApp {
             services
                 .AddSslRedirect(options => {
                     options.SslPort = Environment.IsDevelopment() ? 44300 : 443;
-                    options.Policies.RedirectAll();
                     options.Policies.RedirectPath("/Secure/**.html");
                 })
                 .AddMvc();

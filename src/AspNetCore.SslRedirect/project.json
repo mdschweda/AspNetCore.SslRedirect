@@ -2,7 +2,7 @@
   "title": "AspNetCore.SslRedirect",
   "description": "ASP.NET Core middleware and MVC extension for redirecting requests to HTTPS.",
   "copyright": "Copyright © 2017 Marcus Schweda",
-  "version": "1.0.1-*",
+  "version": "1.0.2-*",
 
   "buildOptions": {
     "xmlDoc": true

@@ -1,4 +1,4 @@
-version: 1.0.1-build{build}
+version: 1.0.2-build{build}
 configuration: Release
 init:
 - cmd: git config --global core.autocrlf true

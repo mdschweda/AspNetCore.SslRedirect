@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -32,9 +33,12 @@ namespace MS.AspNetCore.Ssl {
             if (!context.Request.IsHttps && (!enforcePolicies || await EnforcePolicies(context))) {
                 context.Request.Scheme = "https";
                 var host = new HostString(context.Request.Host.Host, _options.SslPort);
-
-                context.Response.Headers[HeaderNames.Location] =
-                    $"https://{host}{context.Request.Path}";
+                var builder = new UriBuilder("https", context.Request.Host.Host, _options.SslPort);
+                builder.Path = context.Request.PathBase + context.Request.Path;
+                if (context.Request.QueryString.HasValue)
+                    builder.Query = context.Request.QueryString.Value;
+                
+                context.Response.Headers[HeaderNames.Location] = builder.Uri.AbsoluteUri;
 
                 var method = _options.Method;
                 if (HttpMethods.IsGet(context.Request.Method))
