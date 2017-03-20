@@ -33,8 +33,9 @@ namespace MS.AspNetCore.Ssl {
             if (!context.Request.IsHttps && (!enforcePolicies || await EnforcePolicies(context))) {
                 context.Request.Scheme = "https";
                 var host = new HostString(context.Request.Host.Host, _options.SslPort);
-                var builder = new UriBuilder("https", context.Request.Host.Host, _options.SslPort);
-                builder.Path = context.Request.PathBase + context.Request.Path;
+                var builder = new UriBuilder("https", context.Request.Host.Host, _options.SslPort) {
+                    Path = context.Request.PathBase + context.Request.Path
+                };
                 if (context.Request.QueryString.HasValue)
                     builder.Query = context.Request.QueryString.Value;
                 
