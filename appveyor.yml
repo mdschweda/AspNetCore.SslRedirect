@@ -15,7 +15,7 @@ build_script:
 after_build:
 - cmd: dotnet pack src\AspNetCore.SslRedirect -c %CONFIGURATION%
 test_script:
-- cmd: dotnet test test\AspNetCore.SslRedirect.Tests -c %CONFIGURATION%
+- cmd: dotnet test test\AspNetCore.SslRedirect.Tests\AspNetCore.SslRedirect.Tests.csproj -c %CONFIGURATION%
 artifacts:
 - path: src\AspNetCore.SslRedirect\bin\%CONFIGURATION%\*.nupkg
 deploy: off
