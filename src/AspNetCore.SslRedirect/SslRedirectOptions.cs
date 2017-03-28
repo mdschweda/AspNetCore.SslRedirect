@@ -44,6 +44,14 @@ namespace MS.AspNetCore.Ssl {
             get;
         } = new List<ISslPolicy>();
 
+        /// <summary>
+        /// Gets or sets the SslTermination Flag
+        /// </summary>
+        public bool AllowSslTermination
+        {
+            get;
+            set;
+        } = false;
     }
 
 }
