@@ -136,3 +136,5 @@ Upgrades unsecured requests invoking action `Authenticate`.
   The middleware will automatically add a [HSTS header](https://tools.ietf.org/html/rfc6797) unless
   `options.HstsHeader` is `null`.
 * **Policies** - The collection of policies for upgrading unsecured requests.
+
+* **Allow SSL Termination** - This option allows for the case where something like a proxy or load balancer (say HAProxy or AWS Elastic Load Balancer) is performing SSL Termination. In this case the X-Forwarded-Proto should be set to `https`, but the protocol locally will be `http`. Setting `option.AllowSslTermination = true` will handle these cases.

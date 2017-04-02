@@ -188,6 +188,78 @@ namespace MS.AspNetCore.Ssl.Tests {
             Assert.True(context.Response.Headers[HeaderNames.Location] == "https://localhost:1234/test");
         }
 
+        [Fact(DisplayName = "SslRedirector.SslTerminationNoRedirect")]
+        public void SslTerminationDoesNotRedirectForSecureForward()
+        {
+            var context = new DefaultHttpContext();
+            context.Request.Host = new HostString("localhost", 80);
+            context.Request.Method = HttpMethods.Post;
+            context.Request.IsHttps = false;
+            context.Request.Headers["X-Forwarded-Proto"] = "https";
+
+            var redirect = BuildRedirector(o => {
+                o.Policies.RedirectAll();
+                o.AllowSslTermination = true;
+            })
+            .Accept(context).Result;
+
+            Assert.True(context.Response.StatusCode == (int)HttpStatusCode.OK);
+        }
+
+        [Fact(DisplayName = "SslRedirector.SslTerminationRedirected")]
+        public void SslTerminationRedirectsIfNotSecureForward()
+        {
+            var context = new DefaultHttpContext();
+            context.Request.Host = new HostString("localhost", 80);
+            context.Request.Method = HttpMethods.Post;
+            context.Request.IsHttps = false;
+            context.Request.Headers["X-Forwarded-Proto"] = "http";
+
+            var redirect = BuildRedirector(o => {
+                o.Policies.RedirectAll();
+                o.AllowSslTermination = true;
+            })
+            .Accept(context).Result;
+
+            Assert.True(context.Response.StatusCode == (int)HttpRedirectMethod.TemporaryRedirect);
+        }
+
+        [Fact(DisplayName = "SslRedirector.SslTerminationRedirectedOnNoHeader")]
+        public void SslTerminationRedirectsIfXForwardedProtoHeaderNotFound()
+        {
+            var context = new DefaultHttpContext();
+            context.Request.Host = new HostString("localhost", 80);
+            context.Request.Method = HttpMethods.Post;
+            context.Request.IsHttps = false;
+
+            var redirect = BuildRedirector(o => {
+                o.Policies.RedirectAll();
+                o.AllowSslTermination = true;
+            })
+            .Accept(context).Result;
+
+            Assert.True(context.Response.StatusCode == (int)HttpRedirectMethod.TemporaryRedirect);
+        }
+
+        [Fact(DisplayName = "SslRedirector.ForwardedPortSetOnRedirection")]
+        public void ProxySSLTerminationSetsForwardedPort()
+        {
+            var context = new DefaultHttpContext();
+            context.Request.Host = new HostString("localhost", 80);
+            context.Request.Method = HttpMethods.Post;
+            context.Request.IsHttps = false;
+            context.Request.Path = "/test";
+            context.Request.Headers["X-Forwarded-Proto"] = "http";
+            context.Request.Headers["X-Forwarded-Port"] = "1234";
+
+            var redirect = BuildRedirector(o => {
+                o.Policies.RedirectAll();
+                o.AllowSslTermination = true;
+            })
+            .Accept(context).Result;
+
+            Assert.True(context.Response.Headers[HeaderNames.Location] == "https://localhost:1234/test");
+        }
     }
 
 }
