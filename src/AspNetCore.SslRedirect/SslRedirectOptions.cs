@@ -45,13 +45,19 @@ namespace MS.AspNetCore.Ssl {
         } = new List<ISslPolicy>();
 
         /// <summary>
-        /// Gets or sets the SslTermination Flag
+        /// Gets or sets a value indicating whether SSL termination should be detected and performed
+        /// based on <c>Forwarded</c> headers.
         /// </summary>
-        public bool AllowSslTermination
-        {
+        /// <remarks>
+        /// This value should be used in secure environments where the application receives requests from a
+        /// load balancer or proxy.
+        /// </remarks>
+        /// <seealso href="https://tools.ietf.org/html/rfc7239"/>
+        public bool AllowSslTermination {
             get;
             set;
-        } = false;
+        }
+
     }
 
 }
