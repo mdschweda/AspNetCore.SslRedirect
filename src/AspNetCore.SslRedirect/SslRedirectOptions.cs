@@ -46,8 +46,12 @@ namespace MS.AspNetCore.Ssl {
         } = new List<ISslPolicy>();
 
         /// <summary>
-        /// Gets or sets a delegate that can modify the <see cref="SslRedirectOptions"/> on a per-request basis.
+        /// Gets or sets a delegate that wraps SSL redirection.
         /// </summary>
+        /// <remarks>
+        /// This delegate can modify the <see cref="SslRedirectOptions"/> on a per-request basis and instruct the
+        /// termination of SSL redirection.
+        /// </remarks>
         public SslRedirectFilter Filter {
             get;
             set;
