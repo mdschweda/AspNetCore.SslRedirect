@@ -22,7 +22,9 @@ namespace MS.AspNetCore.Ssl {
             var httpContext = context.HttpContext;
             var terminate = context.Options.Filter?.Invoke(context) ?? false;
 
-            if (!terminate && !httpContext.Request.IsHttps && (!enforcePolicies || await EnforcePolicies(context))) {
+            if (terminate)
+                _logger.LogInformation("SSL termination detected.");
+            else if (!httpContext.Request.IsHttps && (!enforcePolicies || await EnforcePolicies(context))) {
                 httpContext.Request.Scheme = "https";
                 var host = new HostString(httpContext.Request.Host.Host, context.Options.SslPort);
                 var builder = new UriBuilder("https", httpContext.Request.Host.Host, context.Options.SslPort) {
