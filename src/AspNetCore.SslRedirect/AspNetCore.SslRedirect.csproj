@@ -21,6 +21,7 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <RepositoryUrl>https://github.com/mdschweda/AspNetCore.SslRedirect.git</RepositoryUrl>
     <RootNamespace>MS.AspNetCore.Ssl</RootNamespace>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
