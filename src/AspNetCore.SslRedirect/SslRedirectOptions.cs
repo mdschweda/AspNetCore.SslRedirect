@@ -42,21 +42,29 @@ namespace MS.AspNetCore.Ssl {
         /// </summary>
         public ICollection<ISslPolicy> Policies {
             get;
+            private set;
         } = new List<ISslPolicy>();
 
         /// <summary>
-        /// Gets or sets a value indicating whether SSL termination should be detected and performed
-        /// based on <c>Forwarded</c> headers.
+        /// Gets or sets a delegate that can modify the <see cref="SslRedirectOptions"/> on a per-request basis.
         /// </summary>
-        /// <remarks>
-        /// This value should be used in secure environments where the application receives requests from a
-        /// load balancer or proxy.
-        /// </remarks>
-        /// <seealso href="https://tools.ietf.org/html/rfc7239"/>
-        public bool AllowSslTermination {
+        public SslRedirectFilter Filter {
             get;
             set;
         }
+
+        /// <summary>
+        /// Duplicates the object.
+        /// </summary>
+        /// <returns>The duplicated object.</returns>
+        internal SslRedirectOptions Clone() =>
+            new SslRedirectOptions {
+                SslPort = SslPort,
+                Method = Method,
+                HstsHeader = HstsHeader?.Clone(),
+                Policies = new List<ISslPolicy>(Policies),
+                Filter = Filter
+            };
 
     }
 

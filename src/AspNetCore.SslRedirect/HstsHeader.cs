@@ -28,6 +28,16 @@ namespace MS.AspNetCore.Ssl {
             set;
         }
 
+        /// <summary>
+        /// Duplicates the object.
+        /// </summary>
+        /// <returns>The duplicated object.</returns>
+        internal HstsHeader Clone() =>
+            new HstsHeader {
+                MaxAge = MaxAge,
+                IncludeSubDomains = IncludeSubDomains
+            };
+
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace MS.AspNetCore.Ssl {
 
@@ -9,6 +10,7 @@ namespace MS.AspNetCore.Ssl {
     public class SslRedirectMiddleware {
 
         readonly RequestDelegate _next;
+        readonly SslRedirectOptions _options;
         readonly ISslRedirector _provider;
 
         /// <summary>
@@ -18,8 +20,10 @@ namespace MS.AspNetCore.Ssl {
         /// <param name="provider">
         /// The <see cref="ISslRedirector"/> providing the redirect functionality.
         /// </param>
-        public SslRedirectMiddleware(RequestDelegate next, ISslRedirector provider) {
+        /// <param name="options">The redirect options.</param>
+        public SslRedirectMiddleware(RequestDelegate next, ISslRedirector provider, IOptions<SslRedirectOptions> options) {
             _next = next;
+            _options = options.Value;
             _provider = provider;
         }
 
@@ -31,9 +35,10 @@ namespace MS.AspNetCore.Ssl {
         /// A <see cref="Task"/> that represents the completion of request processing.
         /// </returns>
         public async Task Invoke(HttpContext context) {
-            if (await _provider.Accept(context))
+            var sslContext = new SslRedirectContext(context, _options);
+            if (await _provider.Accept(sslContext))
                 return;
-            _provider.AddHstsHeader(context);
+            _provider.AddHstsHeader(sslContext);
             await _next.Invoke(context);
         }
 

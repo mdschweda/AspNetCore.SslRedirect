@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace MS.AspNetCore.Ssl.Mvc {
 
@@ -9,6 +10,7 @@ namespace MS.AspNetCore.Ssl.Mvc {
     /// </summary>
     internal class RequireSslFilter : IActionFilter {
 
+        readonly SslRedirectOptions _options;
         readonly ISslRedirector _provider;
         readonly ILogger _logger;
 
@@ -18,9 +20,11 @@ namespace MS.AspNetCore.Ssl.Mvc {
         /// <param name="provider">
         /// The <see cref="ISslRedirector"/> providing the redirect functionality.
         /// </param>
+        /// <param name="options">The redirect options.</param>
         /// <param name="logger">The <see cref="ILogger"/>.</param>
-        public RequireSslFilter(ISslRedirector provider, ILogger<RequireSslFilter> logger) {
+        public RequireSslFilter(ISslRedirector provider, IOptions<SslRedirectOptions> options, ILogger<RequireSslFilter> logger) {
             _provider = provider;
+            _options = options.Value;
             _logger = logger;
         }
 
@@ -30,7 +34,7 @@ namespace MS.AspNetCore.Ssl.Mvc {
                 _logger.LogInformation("Action {action} requires SSL.",
                     context.ActionDescriptor.DisplayName);
 
-            if (await _provider.Accept(context.HttpContext, false))
+            if (await _provider.Accept(new SslRedirectContext(context.HttpContext, _options), false))
                 context.Result = new NullResult();
         }
 

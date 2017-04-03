@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace MS.AspNetCore.Ssl.Mvc {
 
@@ -17,8 +18,9 @@ namespace MS.AspNetCore.Ssl.Mvc {
         /// <inheritdoc/>
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) {
             var provider = serviceProvider.GetRequiredService<ISslRedirector>();
+            var options = serviceProvider.GetRequiredService<IOptions<SslRedirectOptions>>();
             var logger = serviceProvider.GetRequiredService<ILogger<RequireSslFilter>>();
-            return new RequireSslFilter(provider, logger);
+            return new RequireSslFilter(provider, options, logger);
         }
 
     }

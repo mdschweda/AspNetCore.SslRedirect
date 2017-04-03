@@ -25,14 +25,13 @@ namespace WebApp {
             Environment = env;
         }
 
-        public void ConfigureServices(IServiceCollection services) {
+        public void ConfigureServices(IServiceCollection services) =>
             services
                 .AddSslRedirect(options => {
                     options.SslPort = Environment.IsDevelopment() ? 44300 : 443;
                     options.Policies.RedirectPath("/Secure/**.html");
                 })
                 .AddMvc();
-        }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) {
             if (env.IsDevelopment())

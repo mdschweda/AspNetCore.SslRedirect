@@ -63,33 +63,44 @@ namespace MS.AspNetCore.Ssl {
             private set;
         }
 
+        /// <summary>
+        /// Constructs a <see cref="ForwardedHeader"/> object from a <see cref="HttpContext"/>.
+        /// </summary>
+        /// <param name="context">The context to parse.</param>
+        /// <returns>The constructed <see cref="ForwardedHeader"/> object or <see langword="null"/>.</returns>
         public static ForwardedHeader FromHttpContext(HttpContext context) {
             var headers = context?.Request.Headers ??
                 throw new ArgumentNullException(nameof(context));
 
-            var fwh = new ForwardedHeader();
+            ForwardedHeader result = null;
+            ForwardedHeader header() {
+                if (result == null)
+                    result = new ForwardedHeader();
+                return result;
+            }
 
             foreach (var pair in _xProtocolHeaders)
                 if (headers.ContainsKey(pair.Key))
-                    fwh.Protocol = pair.Value.Equals(headers[pair.Key], StringComparison.OrdinalIgnoreCase) ?
-                        ProtocolType.Https : ProtocolType.Http;
+                    header().Protocol =
+                        pair.Value.Equals(headers[pair.Key], StringComparison.OrdinalIgnoreCase) ?
+                            ProtocolType.Https : ProtocolType.Http;
 
             if (headers.TryGetValue(HeaderNames.ForwardedFor, out var @for))
-                fwh.For = @for
+                header().For = @for
                     .SelectMany(f => f.Split(new[] { ',' }, RemoveEmptyEntries))
                     .Select(f => f.Trim())
                     .ToArray();
             else if (headers.TryGetValue(HeaderNames.ProxyUserIp, out var @ip))
-                fwh.For = @ip;
+                header().For = @ip;
 
             if (headers.TryGetValue(HeaderNames.ForwardedHost, out var host))
-                fwh.Host = host;
+                header().Host = host;
 
             if (headers.TryGetValue(HeaderNames.ForwardedPort, out var pv))
                 if (Int32.TryParse(pv, out var port))
-                    fwh.Port = port;
+                    header().Port = port;
 
-            // Forwarded: for=a,for=b;by=c;host=d;proto=https
+            // https://tools.ietf.org/html/rfc7239
             if (headers.TryGetValue(HeaderNames.Forwarded, out var fw)) {
                 var values = fw
                     .SelectMany(f => f.Split(new[] { ';', ',' }, RemoveEmptyEntries))
@@ -98,20 +109,20 @@ namespace MS.AspNetCore.Ssl {
                     .ToLookup(f => f[0].Trim().ToUpperInvariant(), f => f[1].Trim());
 
                 if (values.Contains("PROTO"))
-                    fwh.Protocol = values["PROTO"].Last().Equals("https", StringComparison.OrdinalIgnoreCase) ?
+                    header().Protocol = values["PROTO"].Last().Equals("https", StringComparison.OrdinalIgnoreCase) ?
                         ProtocolType.Https : ProtocolType.Http;
 
                 if (values.Contains("FOR"))
-                    fwh.For = values["FOR"].ToArray();
+                    header().For = values["FOR"].ToArray();
 
                 if (values.Contains("HOST"))
-                    fwh.Host = values["HOST"].Last();
+                    header().Host = values["HOST"].Last();
 
                 if (values.Contains("BY"))
-                    fwh.By = values["BY"].Last();
+                    header().By = values["BY"].Last();
             }
 
-            return fwh;
+            return result;
         }
 
     }

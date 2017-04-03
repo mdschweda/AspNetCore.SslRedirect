@@ -6,7 +6,20 @@ namespace MS.AspNetCore.Ssl.Tests {
     public class ForwardedHeaderTests {
 
         /// <summary>
-        /// ..........
+        /// <see cref="ForwardedHeader.FromHttpContext(HttpContext)"/> must return <see langword="null"/>
+        /// when no Forwarded headers are present.
+        /// </summary>
+        [Fact(DisplayName = "ForwardedHeader.ParseReturnsNull")]
+        public void ParseReturnsNull() {
+            var context = new DefaultHttpContext();
+
+            var header = ForwardedHeader.FromHttpContext(context);
+
+            Assert.Null(header);
+        }
+
+        /// <summary>
+        /// <see cref="ForwardedHeader.Protocol"/> must be set for HTTP requests with applicable Forwarded headers.
         /// </summary>
         [Theory(DisplayName = "ForwardedHeader.XForwardedProtocolRead")]
         [InlineData("X-Forwarded-Proto", "https")]
@@ -24,7 +37,7 @@ namespace MS.AspNetCore.Ssl.Tests {
         }
 
         /// <summary>
-        /// ..........
+        /// <see cref="ForwardedHeader.For"/> must be set for HTTP requests with <c>X-Forwarded-For</c> headers.
         /// </summary>
         [Fact(DisplayName = "ForwardedHeader.XForwardedForParsed")]
         public void XForwardedForParsed() {
@@ -40,7 +53,7 @@ namespace MS.AspNetCore.Ssl.Tests {
         }
 
         /// <summary>
-        /// ..........
+        /// <see cref="ForwardedHeader.For"/> must be set for HTTP requests with <c>X-ProxyUser-Ip</c> headers.
         /// </summary>
         [Fact(DisplayName = "ForwardedHeader.XProxyUserIpRead")]
         public void XProxyUserIpRead() {
@@ -54,7 +67,7 @@ namespace MS.AspNetCore.Ssl.Tests {
         }
 
         /// <summary>
-        /// ..........
+        /// <see cref="ForwardedHeader.Host"/> must be set for HTTP requests with <c>X-Forwarded-Host</c> headers.
         /// </summary>
         [Fact(DisplayName = "ForwardedHeader.XForwardedHostRead")]
         public void XForwardedHostRead() {
@@ -68,7 +81,7 @@ namespace MS.AspNetCore.Ssl.Tests {
         }
 
         /// <summary>
-        /// ..........
+        /// <see cref="ForwardedHeader.Port"/> must be set for HTTP requests with <c>X-Forwarded-Port</c> headers.
         /// </summary>
         [Fact(DisplayName = "ForwardedHeader.XForwardedPortRead")]
         public void XForwardedPortRead() {
@@ -82,7 +95,7 @@ namespace MS.AspNetCore.Ssl.Tests {
         }
 
         /// <summary>
-        /// ..........
+        /// <see cref="ForwardedHeader"/> must be constructed for HTTP requests with <c>Forwarded</c> headers.
         /// </summary>
         [Fact(DisplayName = "ForwardedHeader.XForwardedParsed")]
         public void XForwardedParsed() {
