@@ -2,6 +2,8 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/g166j7nsrpxb2bl8/branch/master?svg=true)](https://ci.appveyor.com/project/mdschweda/aspnetcore-sslredirect/branch/master)
 
+**This package is now obsolete. Use the official [ASP.NET Core Middleware](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl) instead.**
+
 ASP.NET Core middleware and MVC extension for redirecting requests to HTTPS.
 
 ## Installation
